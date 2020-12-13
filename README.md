@@ -1,22 +1,9 @@
-# Script
-Script for user data for creating AWS EC2 instance:
+#!/bin/bash
+yum -y update
+yum install -y ruby
+yum install -y aws-cli
+cd /home/ec2-user
+aws s3 cp s3://aws-codedeploy-us-east-2/latest/install . --region us-east-2
+chmod +x ./install
+./install auto
 
-FROM ubuntu:18.04
-
-# Install dependencies
-RUN apt-get update && \
- apt-get -y install apache2
-
-# Install apache and write hello world message
-RUN echo 'Hello World!' > /var/www/html/index.html
-
-# Configure apache
-RUN echo '. /etc/apache2/envvars' > /root/run_apache.sh && \
- echo 'mkdir -p /var/run/apache2' >> /root/run_apache.sh && \
- echo 'mkdir -p /var/lock/apache2' >> /root/run_apache.sh && \ 
- echo '/usr/sbin/apache2 -D FOREGROUND' >> /root/run_apache.sh && \ 
- chmod 755 /root/run_apache.sh
-
-EXPOSE 80
-
-CMD /root/run_apache.sh
